@@ -1,4 +1,3 @@
-
 name: DistributedOrderSystem CI/CD
 
 on:
@@ -27,7 +26,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '25'
+          java-version: "25"
           cache: maven
 
       - name: Build and test
@@ -53,6 +52,24 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Verify Docker Hub secrets
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -z "$DOCKER_USERNAME" ]; then
+            echo "Docker username is missing"
+            exit 1
+          fi
+
+          if [ -z "$DOCKER_TOKEN" ]; then
+            echo "Docker token is missing"
+            exit 1
+          fi
+
+          echo "Docker username is present"
+          echo "Docker token is present"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
