@@ -70,7 +70,7 @@ jobs:
 
           echo "Docker username is present"
           echo "Docker token is present"
-
+          printf '%s' "$DOCKER_TOKEN" | sha256sum
       - name: Login to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
